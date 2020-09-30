@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="232.0" prefWidth="372.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.Jan.JPack.MainController">
+  <tabs>
+    <Tab text="Program">
+         <content>
+            <Pane prefHeight="202.0" prefWidth="372.0">
+               <children>
+                  <ChoiceBox fx:id="type" layoutX="217.0" layoutY="13.0" prefHeight="25.0" prefWidth="149.0" />
+                  <Text layoutX="6.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type:" wrappingWidth="71.025390625">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="jar_chooser" layoutX="343.0" layoutY="42.0" mnemonicParsing="false" onAction="#onJarChooser" prefHeight="12.0" prefWidth="14.0" text="Button" />
+                  <TextField fx:id="jar_path" editable="false" layoutX="111.0" layoutY="42.0" prefHeight="25.0" prefWidth="232.0" />
+                  <Text layoutX="7.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JAR File:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="7.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Main class:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="main_class" layoutX="110.0" layoutY="77.0" prefHeight="25.0" prefWidth="256.0" />
+                  <Text layoutX="7.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JDK 14+ Dir: ">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="java_dir" editable="false" layoutX="110.0" layoutY="109.0" prefHeight="25.0" prefWidth="232.0" />
+                  <Button fx:id="java_chooser" layoutX="342.0" layoutY="109.0" mnemonicParsing="false" onAction="#onJDKDir" prefHeight="25.0" prefWidth="24.0" text="Button" />
+                  <Text layoutX="9.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Output:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="output_dir" editable="false" layoutX="110.0" layoutY="140.0" prefHeight="25.0" prefWidth="232.0" />
+                  <Button fx:id="output_button" layoutX="342.0" layoutY="140.0" mnemonicParsing="false" onAction="#onOutputDir" prefHeight="25.0" prefWidth="24.0" text="Button" />
+                  <Button fx:id="compile" layoutX="146.0" layoutY="170.0" mnemonicParsing="false" onAction="#onCompile" prefHeight="25.0" prefWidth="81.0" text="Compile">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
+         </content>
+    </Tab>
+    <Tab text="Metadata">
+         <content>
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Text layoutX="14.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="app_name" layoutX="123.0" layoutY="13.0" prefHeight="25.0" prefWidth="229.0" promptText="Enter the application name here" />
+                  <Text layoutX="14.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="app_desc" layoutX="123.0" layoutY="44.0" prefHeight="25.0" prefWidth="229.0" promptText="Enter the description here" />
+                  <Text layoutX="14.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Copyright:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="app_copy" layoutX="123.0" layoutY="80.0" prefHeight="25.0" prefWidth="229.0" promptText="Enter the description here" />
+                  <Text layoutX="14.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Version:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="app_v" layoutX="123.0" layoutY="115.0" prefHeight="25.0" prefWidth="229.0" promptText="Enter the version here" />
+                  <Text layoutX="14.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Icon:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="icon_button" layoutX="328.0" layoutY="151.0" mnemonicParsing="false" onAction="#onIconChange" prefHeight="25.0" prefWidth="0.0" text="Change" />
+                  <TextField fx:id="icon_path" editable="false" layoutX="123.0" layoutY="151.0" prefHeight="25.0" prefWidth="206.0" />
+               </children></Pane>
+         </content>
+    </Tab>
+      <Tab text="Additions">
+         <content>
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <CheckBox fx:id="create_shortcut" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Create a desktop shortcut">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </CheckBox>
+                  <CheckBox fx:id="dir_chooser" layoutX="14.0" layoutY="35.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="344.0" text="Let the user change the installation folder">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </CheckBox>
+                  <CheckBox fx:id="system_menu" layoutX="14.0" layoutY="63.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="344.0" text="Add a shortcut to the system menu">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </CheckBox>
+                  <TextField fx:id="system_group" layoutX="39.0" layoutY="89.0" promptText="Group" />
+                  <CheckBox fx:id="user_mode" layoutX="14.0" layoutY="114.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="344.0" text="Install with user rights">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </CheckBox>
+               </children>
+            </Pane>
+         </content>
+      </Tab>
+  </tabs>
+</TabPane>
