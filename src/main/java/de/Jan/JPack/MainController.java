@@ -57,6 +57,10 @@ public class MainController {
     public CheckBox console_mode;
     @FXML
     public TextArea java_options;
+    @FXML
+    public TextArea module_path;
+    @FXML
+    public TextArea add_modules;
 
     private File jar_File;
     private File output;
@@ -185,7 +189,11 @@ public class MainController {
             if(!java_options.getText().equals("")) {
                 command += " --java-options \"" + java_options.getText() + "\"";
             }
+            if(!module_path.getText().equals("") && !add_modules.getText().equals("")) {
+                command += " --module-path \"" + module_path.getText() + "\" --add-modules " + add_modules.getText();
+            }
             try {
+                System.out.println(command);
                 Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"" + command + "\"");
             } catch (IOException ioException) {
                 ioException.printStackTrace();

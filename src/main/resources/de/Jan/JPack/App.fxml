@@ -146,7 +146,20 @@
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <TextArea fx:id="java_options" layoutX="139.0" layoutY="11.0" prefHeight="200.0" prefWidth="222.0" />
+                  <TextArea fx:id="java_options" layoutX="139.0" layoutY="11.0" prefHeight="56.0" prefWidth="222.0" />
+                  <Text layoutX="56.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+                  <Text layoutX="15.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Module-Path">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="15.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add-Modules:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <TextArea fx:id="module_path" layoutX="139.0" layoutY="73.0" prefHeight="56.0" prefWidth="222.0" />
+                  <TextArea fx:id="add_modules" layoutX="139.0" layoutY="139.0" prefHeight="56.0" prefWidth="222.0" />
                </children>
             </Pane>
          </content>
