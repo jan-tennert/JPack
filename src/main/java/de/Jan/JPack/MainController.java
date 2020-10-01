@@ -51,6 +51,10 @@ public class MainController {
     public TextField system_group;
     @FXML
     public CheckBox user_mode;
+    @FXML
+    public TextField vendor;
+    @FXML
+    public CheckBox console_mode;
 
     private File jar_File;
     private File output;
@@ -143,6 +147,7 @@ public class MainController {
             String out = "\"" + output.getAbsolutePath() + "\"";
             String jar = "\"" + jar_File.getName() + "\"";
             String main = main_class.getText();
+            String vendor = this.vendor.getText();
             String type = this.type.getSelectionModel().getSelectedItem().getShortcut();
 
             String command = jp + " --type " + type + " --dest " + out + " --input " + in + " --main-jar " + jar + " --main-class " + main;
@@ -169,7 +174,12 @@ public class MainController {
                     command += " --win-menu-group \"" + system_group.getText() + "\"";
                 }
             }
-            System.out.println(command);
+            if(!vendor.equals("")) {
+                command += " --vendor \"" + vendor + "\"";
+            }
+            if(console_mode.selectedProperty().get()) {
+                command += " --win-console";
+            }
             try {
                 Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"" + command + "\"");
             } catch (IOException ioException) {

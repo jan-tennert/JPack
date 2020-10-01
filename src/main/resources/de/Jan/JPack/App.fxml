@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="232.0" prefWidth="372.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.Jan.JPack.MainController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="372.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.Jan.JPack.MainController">
   <tabs>
     <Tab text="Program">
          <content>
@@ -93,6 +93,12 @@
                   </Text>
                   <Button fx:id="icon_button" layoutX="328.0" layoutY="151.0" mnemonicParsing="false" onAction="#onIconChange" prefHeight="25.0" prefWidth="0.0" text="Change" />
                   <TextField fx:id="icon_path" editable="false" layoutX="123.0" layoutY="151.0" prefHeight="25.0" prefWidth="206.0" />
+                  <TextField fx:id="vendor" layoutX="123.0" layoutY="182.0" prefHeight="25.0" prefWidth="228.0" promptText="Enter the publisher here" />
+                  <Text layoutX="14.0" layoutY="201.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Publisher:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
                </children></Pane>
          </content>
     </Tab>
@@ -117,6 +123,11 @@
                   </CheckBox>
                   <TextField fx:id="system_group" layoutX="39.0" layoutY="89.0" promptText="Group" />
                   <CheckBox fx:id="user_mode" layoutX="14.0" layoutY="114.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="344.0" text="Install with user rights">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </CheckBox>
+                  <CheckBox fx:id="console_mode" layoutX="14.0" layoutY="142.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="344.0" text="Create a console application">
                      <font>
                         <Font size="15.0" />
                      </font>
