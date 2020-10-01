@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
@@ -132,6 +133,20 @@
                         <Font size="15.0" />
                      </font>
                   </CheckBox>
+               </children>
+            </Pane>
+         </content>
+      </Tab>
+      <Tab text="Java Options">
+         <content>
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Text layoutX="14.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Java Options:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <TextArea fx:id="java_options" layoutX="139.0" layoutY="11.0" prefHeight="200.0" prefWidth="222.0" />
                </children>
             </Pane>
          </content>

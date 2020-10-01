@@ -55,6 +55,8 @@ public class MainController {
     public TextField vendor;
     @FXML
     public CheckBox console_mode;
+    @FXML
+    public TextArea java_options;
 
     private File jar_File;
     private File output;
@@ -179,6 +181,9 @@ public class MainController {
             }
             if(console_mode.selectedProperty().get()) {
                 command += " --win-console";
+            }
+            if(!java_options.getText().equals("")) {
+                command += " --java-options \"" + java_options.getText() + "\"";
             }
             try {
                 Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"" + command + "\"");
