@@ -8,10 +8,11 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="372.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.Jan.JPack.MainController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="372.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.Jan.JPack.MainController">
   <tabs>
     <Tab text="Program">
          <content>
@@ -50,11 +51,14 @@
                   </Text>
                   <TextField fx:id="output_dir" editable="false" layoutX="110.0" layoutY="140.0" prefHeight="25.0" prefWidth="232.0" />
                   <Button fx:id="output_button" layoutX="342.0" layoutY="140.0" mnemonicParsing="false" onAction="#onOutputDir" prefHeight="25.0" prefWidth="24.0" text="Button" />
-                  <Button fx:id="compile" layoutX="146.0" layoutY="170.0" mnemonicParsing="false" onAction="#onCompile" prefHeight="25.0" prefWidth="81.0" text="Compile">
+                  <Button fx:id="compile" layoutX="146.0" layoutY="183.0" mnemonicParsing="false" onAction="#onCompile" prefHeight="25.0" prefWidth="81.0" text="Compile">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Button>
+                  <VBox layoutX="6.0" layoutY="4.0" prefHeight="17.0" prefWidth="364.0" />
+                  <Button fx:id="save" layoutX="50.0" layoutY="183.0" mnemonicParsing="false" onAction="#onSave" prefHeight="25.0" prefWidth="68.0" text="Save" />
+                  <Button fx:id="open" layoutX="254.0" layoutY="183.0" mnemonicParsing="false" onAction="#onOpen" prefHeight="25.0" prefWidth="81.0" text="Open" />
                </children>
             </Pane>
          </content>

@@ -4,10 +4,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.IOException;
 
 /**
@@ -22,6 +22,11 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("App"));
         stage.setScene(scene);
+
+        Menu file = new Menu("File");
+
+        MenuBar mbar = new MenuBar();
+        mbar.getMenus().add(file);
         s = stage;
         stage.show();
     }

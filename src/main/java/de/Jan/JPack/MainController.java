@@ -1,5 +1,7 @@
 package de.Jan.JPack;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -9,8 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 public class MainController {
     @FXML
@@ -61,15 +62,24 @@ public class MainController {
     public TextArea module_path;
     @FXML
     public TextArea add_modules;
+    @FXML
+    public Button save;
+    @FXML
+    public Button open;
 
     private File jar_File;
     private File output;
     private File jpackage;
     private File jar_Input;
     private File app_icon;
+    private Gson gson = new Gson();
+    private Type standard =  new Type("EXE (Windows)", "exe");
+    private Type msi = new Type("MSI (Windows)", "msi");
+
 
     public void initialize() {
-        type.getItems().addAll( new Type("EXE (Windows)", "exe"), new Type("MSI (Windows)", "msi"));
+        type.getItems().addAll(standard, msi);
+        type.getSelectionModel().select(standard);
     }
 
     public void onJarChooser(ActionEvent e) {
@@ -203,7 +213,82 @@ public class MainController {
 
     }
 
-    public class Type {
+    public void onSave(ActionEvent e) {
+        FileChooser f = new FileChooser();
+        f.setTitle("Save the file");
+        f.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSettings File", "*.jsettings"));
+        File file = f.showSaveDialog(App.s);
+        Settings s = new Settings(type.getSelectionModel().getSelectedItem().s,
+                !(jar_File == null) ? jar_File.getAbsolutePath() : "",
+                main_class.getText(),
+                java_dir.getText(), output_dir.getText(),
+                app_name.getText(),
+                app_desc.getText(),
+                app_copy.getText(),
+                app_v.getText(),
+                icon_path.getText(),
+                vendor.getText(),
+                create_shortcut.isSelected(),
+                dir_chooser.isSelected(),
+                system_menu.isSelected(),
+                system_group.getText(),
+                user_mode.isSelected(),
+                console_mode.isSelected(),
+                java_options.getText(),
+                module_path.getText(),
+                add_modules.getText());
+        try {
+            FileWriter writer = new FileWriter(file);
+            writer.write(gson.toJson(s));
+            writer.flush();
+            writer.close();
+            Alert a = new Alert(AlertType.INFORMATION);
+            a.setContentText("The settings file was created!");
+            a.setTitle("Information");
+            a.setHeaderText(null);
+            a.show();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+    }
+
+    public void onOpen(ActionEvent e) throws FileNotFoundException {
+        FileChooser f = new FileChooser();
+        f.setTitle("Choose the jsettings file.");
+        f.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSettings File", "*.jsettings"));
+        File file = f.showOpenDialog(App.s);
+        if(file != null && file.exists()) {
+            JsonReader j = new JsonReader(new FileReader(file));
+            Settings s = gson.fromJson(j, Settings.class);
+            type.getSelectionModel().select((s.type.equals("exe")) ? standard : msi);
+            jar_File = new File(s.jarFilePath);
+            jar_path.setText(s.jarFilePath);
+            jar_Input = jar_File.getParentFile();
+            main_class.setText(s.mainClass);
+            java_dir.setText(s.JDKDir);
+            output_dir.setText(s.outputPath);
+            output = new File(s.outputPath);
+            app_name.setText(s.name);
+            app_desc.setText(s.description);
+            app_copy.setText(s.copyright);
+            app_v.setText(s.version);
+            icon_path.setText(s.iconPath);
+            app_icon = new File(s.iconPath);
+            vendor.setText(s.publisher);
+            create_shortcut.setSelected(s.desktopShortcut);
+            dir_chooser.setSelected(s.userInstallFolder);
+            system_menu.setSelected(s.createSystemMenuItem);
+            system_group.setText(s.systemMenuName);
+            user_mode.setSelected(s.installWithUserRights);
+            console_mode.setSelected(s.consoleApplication);
+            java_options.setText(s.javaOption);
+            module_path.setText(s.modulePath);
+            add_modules.setText(s.modules);
+            jpackage = new File(java_dir.getText() + "/bin/jpackage.exe");
+        }
+    }
+
+    private class Type {
 
         private String name;
         private String s;
@@ -225,6 +310,54 @@ public class MainController {
         public String toString() {
             return name;
         }
+    }
+
+    public class Settings {
+
+        private String type;
+        private String jarFilePath;
+        private String mainClass;
+        private String JDKDir;
+        private String outputPath;
+        private String name;
+        private String description;
+        private String copyright;
+        private String version;
+        private String iconPath;
+        private String publisher;
+        private boolean desktopShortcut;
+        private boolean userInstallFolder;
+        private boolean createSystemMenuItem;
+        private String systemMenuName;
+        private boolean installWithUserRights;
+        private boolean consoleApplication;
+        private String javaOption;
+        private String modulePath;
+        private String modules;
+
+        public Settings(String type, String jarFilePath, String mainClass, String JDKDir, String outputPath, String name, String description, String copyright, String version, String iconPath, String publisher, boolean desktopShortcut, boolean userInstallFolder, boolean createSystemMenuItem, String systemMenuName, boolean installWithUserRights, boolean consoleApplication, String javaOption, String modulePath, String modules) {
+            this.type = type;
+            this.jarFilePath = jarFilePath;
+            this.mainClass = mainClass;
+            this.JDKDir = JDKDir;
+            this.outputPath = outputPath;
+            this.name = name;
+            this.description = description;
+            this.copyright = copyright;
+            this.version = version;
+            this.iconPath = iconPath;
+            this.publisher = publisher;
+            this.desktopShortcut = desktopShortcut;
+            this.userInstallFolder = userInstallFolder;
+            this.createSystemMenuItem = createSystemMenuItem;
+            this.systemMenuName = systemMenuName;
+            this.installWithUserRights = installWithUserRights;
+            this.consoleApplication = consoleApplication;
+            this.javaOption = javaOption;
+            this.modulePath = modulePath;
+            this.modules = modules;
+        }
+
     }
 
 }
