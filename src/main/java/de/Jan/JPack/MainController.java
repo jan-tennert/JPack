@@ -230,6 +230,9 @@ public class MainController {
             if(!module_path.getText().equals("") && !add_modules.getText().equals("")) {
                 command += " --module-path \"" + module_path.getText() + "\" --add-modules " + add_modules.getText();
             }
+            if(!user_mode.getText().equals("")) {
+                command += " --win-per-user-install";
+            }
             try {
                 System.out.println(command);
                 Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"" + command + "\"");
