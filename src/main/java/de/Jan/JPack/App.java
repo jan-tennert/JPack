@@ -28,6 +28,7 @@ public class App extends Application {
         MenuBar mbar = new MenuBar();
         mbar.getMenus().add(file);
         s = stage;
+        s.setTitle("JPack");
         stage.show();
     }
 

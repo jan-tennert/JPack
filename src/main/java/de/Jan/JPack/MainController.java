@@ -8,8 +8,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NonNull;
 
 import java.io.*;
 
@@ -63,9 +69,17 @@ public class MainController {
     @FXML
     public TextArea add_modules;
     @FXML
-    public Button save;
+    public MenuItem openFile;
     @FXML
-    public Button open;
+    public MenuItem saveFile;
+    @FXML
+    public MenuItem saveas;
+    @FXML
+    public MenuItem close;
+    @FXML
+    public MenuItem compile;
+    @FXML
+    public MenuItem newFile;
 
     private File jar_File;
     private File output;
@@ -75,11 +89,18 @@ public class MainController {
     private Gson gson = new Gson();
     private Type standard =  new Type("EXE (Windows)", "exe");
     private Type msi = new Type("MSI (Windows)", "msi");
+    private File currentSettingsFile = null;
 
 
     public void initialize() {
         type.getItems().addAll(standard, msi);
         type.getSelectionModel().select(standard);
+        openFile.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_ANY));
+        saveFile.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_ANY));
+        saveas.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.CONTROL_ANY));
+        close.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_ANY));
+        compile.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_ANY));
+        newFile.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_ANY));
     }
 
     public void onJarChooser(ActionEvent e) {
@@ -102,9 +123,16 @@ public class MainController {
     }
 
     public void onJDKDir(ActionEvent e) {
+        String javaHome = System.getenv("JAVA_HOME");
+        File javahomeDir = new File(javaHome);
         DirectoryChooser d = new DirectoryChooser();
+        if(javahomeDir.exists()) {
+            d.setInitialDirectory(javahomeDir);
+        }
         d.setTitle("Select the jdk folder");
-        String path = d.showDialog(App.s).getAbsolutePath();
+        File f = d.showDialog(App.s);
+        if(f == null) return;
+        String path = f.getAbsolutePath();
         String jpackage_path = path + "/bin/jpackage.exe";
         jpackage = new File(jpackage_path);
         if(!jpackage.exists()) {
@@ -164,7 +192,7 @@ public class MainController {
             String jar = "\"" + jar_File.getName() + "\"";
             String main = main_class.getText();
             String vendor = this.vendor.getText();
-            String type = this.type.getSelectionModel().getSelectedItem().getShortcut();
+            String type = this.type.getSelectionModel().getSelectedItem().getS();
 
             String command = jp + " --type " + type + " --dest " + out + " --input " + in + " --main-jar " + jar + " --main-class " + main;
             if(app_icon != null) {
@@ -218,6 +246,7 @@ public class MainController {
         f.setTitle("Save the file");
         f.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSettings File", "*.jsettings"));
         File file = f.showSaveDialog(App.s);
+        if(file == null) return;
         Settings s = new Settings(type.getSelectionModel().getSelectedItem().s,
                 !(jar_File == null) ? jar_File.getAbsolutePath() : "",
                 main_class.getText(),
@@ -242,6 +271,7 @@ public class MainController {
             writer.write(gson.toJson(s));
             writer.flush();
             writer.close();
+            currentSettingsFile = file;
             Alert a = new Alert(AlertType.INFORMATION);
             a.setContentText("The settings file was created!");
             a.setTitle("Information");
@@ -288,22 +318,77 @@ public class MainController {
         }
     }
 
+    public void currentSave(ActionEvent e) throws IOException {
+        if(currentSettingsFile == null || !currentSettingsFile.exists()) {
+            onSave(null);
+        } else {
+            Settings s = new Settings(type.getSelectionModel().getSelectedItem().s,
+                    !(jar_File == null) ? jar_File.getAbsolutePath() : "",
+                    main_class.getText(),
+                    java_dir.getText(), output_dir.getText(),
+                    app_name.getText(),
+                    app_desc.getText(),
+                    app_copy.getText(),
+                    app_v.getText(),
+                    icon_path.getText(),
+                    vendor.getText(),
+                    create_shortcut.isSelected(),
+                    dir_chooser.isSelected(),
+                    system_menu.isSelected(),
+                    system_group.getText(),
+                    user_mode.isSelected(),
+                    console_mode.isSelected(),
+                    java_options.getText(),
+                    module_path.getText(),
+                    add_modules.getText());
+            FileWriter writer = new FileWriter(currentSettingsFile);
+            writer.write(gson.toJson(s));
+            writer.flush();
+            writer.close();
+
+        }
+    }
+
+    public void onClose(ActionEvent e) {
+        System.exit(0);
+    }
+
+    public void onNew(ActionEvent e) {
+        jar_path.setText("");
+        java_dir.setText("");
+        main_class.setText("");
+        app_name.setText("");
+        app_v.setText("");
+        app_desc.setText("");
+        app_copy.setText("");
+        app_icon = null;
+        vendor.setText("");
+        icon_path.setText("");
+        output_dir.setText("");
+        output = null;
+        jar_File = null;
+        jpackage = null;
+        create_shortcut.setSelected(false);
+        user_mode.setSelected(false);
+        system_menu.setSelected(false);
+        system_group.setText("");
+        add_modules.setText("");
+        module_path.setText("");
+        console_mode.setSelected(false);
+        java_options.setText("");
+        dir_chooser.setSelected(false);
+    }
+
     private class Type {
 
+        @Getter
         private String name;
+        @Getter
         private String s;
 
         public Type(String name, String s) {
             this.name = name;
             this.s = s;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getShortcut() {
-            return s;
         }
 
         @Override
