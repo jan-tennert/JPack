@@ -317,6 +317,7 @@ public class MainController {
             module_path.setText(s.modulePath);
             add_modules.setText(s.modules);
             jpackage = new File(java_dir.getText() + "/bin/jpackage.exe");
+            currentSettingsFile = file;
         }
     }
 
