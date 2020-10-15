@@ -234,7 +234,6 @@ public class MainController {
                 command += " --win-per-user-install";
             }
             try {
-                System.out.println(command);
                 Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"" + command + "\"");
             } catch (IOException ioException) {
                 ioException.printStackTrace();
