@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
@@ -18,6 +19,7 @@ import lombok.Getter;
 import lombok.NonNull;
 
 import java.io.*;
+import java.util.Properties;
 
 public class MainController {
     @FXML
@@ -80,6 +82,16 @@ public class MainController {
     public MenuItem compile;
     @FXML
     public MenuItem newFile;
+    @FXML
+    public ChoiceBox<Assocation> assocations;
+    @FXML
+    public TextField description;
+    @FXML
+    public TextField extension;
+    @FXML
+    public TextField mime;
+    @FXML
+    public TextField icon_as;
 
     private File jar_File;
     private File output;
@@ -90,9 +102,46 @@ public class MainController {
     private Type standard =  new Type("EXE (Windows)", "exe");
     private Type msi = new Type("MSI (Windows)", "msi");
     private File currentSettingsFile = null;
+    private File ass_icon;
+    public static File ass;
 
 
-    public void initialize() {
+    public void initialize() throws FileNotFoundException {
+
+        if(ass != null) {
+            File file = ass;
+            if(file.exists()) {
+                JsonReader j = new JsonReader(new FileReader(file));
+                Settings s = gson.fromJson(j, Settings.class);
+                type.getSelectionModel().select((s.type.equals("exe")) ? standard : msi);
+                jar_File = !s.jarFilePath.equals("") ? new File(s.jarFilePath) : null;
+                jar_path.setText(s.jarFilePath);
+                jar_Input = jar_File.getParentFile();
+                main_class.setText(s.mainClass);
+                java_dir.setText(s.JDKDir);
+                output_dir.setText(s.outputPath);
+                output = !s.outputPath.equals("") ? new File(s.outputPath) : null;
+                app_name.setText(s.name);
+                app_desc.setText(s.description);
+                app_copy.setText(s.copyright);
+                app_v.setText(s.version);
+                icon_path.setText(s.iconPath);
+                app_icon = !s.iconPath.equals("") ? new File(s.iconPath) : null;
+                vendor.setText(s.publisher);
+                create_shortcut.setSelected(s.desktopShortcut);
+                dir_chooser.setSelected(s.userInstallFolder);
+                system_menu.setSelected(s.createSystemMenuItem);
+                system_group.setText(s.systemMenuName);
+                user_mode.setSelected(s.installWithUserRights);
+                console_mode.setSelected(s.consoleApplication);
+                java_options.setText(s.javaOption);
+                module_path.setText(s.modulePath);
+                add_modules.setText(s.modules);
+                jpackage = new File(java_dir.getText() + "/bin/jpackage.exe");
+                currentSettingsFile = file;
+            }
+        }
+
         type.getItems().addAll(standard, msi);
         type.getSelectionModel().select(standard);
         openFile.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_ANY));
@@ -101,6 +150,15 @@ public class MainController {
         close.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_ANY));
         compile.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_ANY));
         newFile.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_ANY));
+        assocations.getSelectionModel().selectedItemProperty().addListener(l -> {
+            Assocation as = assocations.getSelectionModel().getSelectedItem();
+            if(as == null) return;
+            extension.setText(as.getExtension());
+            mime.setText(as.getMimiType());
+            icon_as.setText(as.getIconPath());
+            ass_icon = new File(as.getIconPath());
+            description.setText(as.getDescription());
+        });
     }
 
     public void onJarChooser(ActionEvent e) {
@@ -194,47 +252,51 @@ public class MainController {
             String vendor = this.vendor.getText();
             String type = this.type.getSelectionModel().getSelectedItem().getS();
 
-            String command = jp + " --type " + type + " --dest " + out + " --input " + in + " --main-jar " + jar + " --main-class " + main;
+            StringBuilder command = new StringBuilder(jp + " --type " + type + " --dest " + out + " --input " + in + " --main-jar " + jar + " --main-class " + main);
             if(app_icon != null) {
-                command += " --icon \"" + app_icon.getAbsolutePath() + "\"";
+                command.append(" --icon \"").append(app_icon.getAbsolutePath()).append("\"");
             } if(!app_desc.getText().equals("")) {
-                command += " --description \"" + app_desc.getText() + "\"";
+                command.append(" --description \"").append(app_desc.getText()).append("\"");
             } if(!app_name.getText().equals("")) {
-                command += " --name \"" + app_name.getText() + "\"";
+                command.append(" --name \"").append(app_name.getText()).append("\"");
             } if(!app_v.getText().equals("")) {
-                command += " --app-version \"" + app_v.getText() + "\"";
+                command.append(" --app-version \"").append(app_v.getText()).append("\"");
             } if(!app_copy.getText().equals("")) {
-                command += " --copyright \"" + app_copy.getText() + "\"";
+                command.append(" --copyright \"").append(app_copy.getText()).append("\"");
             }
             if(create_shortcut.selectedProperty().get()) {
-                command += " --win-shortcut";
+                command.append(" --win-shortcut");
             }
             if(dir_chooser.selectedProperty().get()) {
-                command += " --win-dir-chooser";
+                command.append(" --win-dir-chooser");
             }
             if(system_menu.selectedProperty().get()) {
-                command += " --win-menu";
+                command.append(" --win-menu");
                 if(!system_group.getText().equals("")) {
-                    command += " --win-menu-group \"" + system_group.getText() + "\"";
+                    command.append(" --win-menu-group \"").append(system_group.getText()).append("\"");
                 }
             }
             if(!vendor.equals("")) {
-                command += " --vendor \"" + vendor + "\"";
+                command.append(" --vendor \"").append(vendor).append("\"");
             }
             if(console_mode.selectedProperty().get()) {
-                command += " --win-console";
+                command.append(" --win-console");
             }
             if(!java_options.getText().equals("")) {
-                command += " --java-options \"" + java_options.getText() + "\"";
+                command.append(" --java-options \"").append(java_options.getText()).append("\"");
             }
             if(!module_path.getText().equals("") && !add_modules.getText().equals("")) {
-                command += " --module-path \"" + module_path.getText() + "\" --add-modules " + add_modules.getText();
+                command.append(" --module-path \"").append(module_path.getText()).append("\" --add-modules ").append(add_modules.getText());
             }
             if(!user_mode.getText().equals("")) {
-                command += " --win-per-user-install";
+                command.append(" --win-per-user-install");
+            }
+            for(Assocation a : assocations.getItems()) {
+                command.append(" --file-associations \"").append(a.getFile().getAbsolutePath()).append("\"");
             }
             try {
-                Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"" + command + "\"");
+                System.out.println(command);
+                Process p = Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"" + command + " && exit\"");
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
@@ -293,19 +355,19 @@ public class MainController {
             JsonReader j = new JsonReader(new FileReader(file));
             Settings s = gson.fromJson(j, Settings.class);
             type.getSelectionModel().select((s.type.equals("exe")) ? standard : msi);
-            jar_File = new File(s.jarFilePath);
+            jar_File = !s.jarFilePath.equals("") ? new File(s.jarFilePath) : null;
             jar_path.setText(s.jarFilePath);
             jar_Input = jar_File.getParentFile();
             main_class.setText(s.mainClass);
             java_dir.setText(s.JDKDir);
             output_dir.setText(s.outputPath);
-            output = new File(s.outputPath);
+            output = !s.outputPath.equals("") ? new File(s.outputPath) : null;
             app_name.setText(s.name);
             app_desc.setText(s.description);
             app_copy.setText(s.copyright);
             app_v.setText(s.version);
             icon_path.setText(s.iconPath);
-            app_icon = new File(s.iconPath);
+            app_icon = !s.iconPath.equals("") ? new File(s.iconPath) : null;
             vendor.setText(s.publisher);
             create_shortcut.setSelected(s.desktopShortcut);
             dir_chooser.setSelected(s.userInstallFolder);
@@ -382,16 +444,138 @@ public class MainController {
         dir_chooser.setSelected(false);
     }
 
-    private class Type {
+    public void onFileIcon(ActionEvent e) {
+        FileChooser f = new FileChooser();
+        f.getExtensionFilters().add(new FileChooser.ExtensionFilter("ICO", "*.ico"));
+        f.setTitle("Select the ico file");
+        File file = f.showOpenDialog(App.s);
+        if(file == null) return;
+        ass_icon = file;
+        icon_as.setText(file.getAbsolutePath());
+    }
 
-        @Getter
+    public void add_button(ActionEvent e) throws IOException {
+        String extension = this.extension.getText();
+        String description = this.description.getText();
+        String mime = this.mime.getText();
+        String iconPath = this.icon_as.getText();
+
+        if(extension.equals("") || description.equals("") || mime.equals("") || iconPath.equals("")) {
+            Alert a = new Alert(AlertType.ERROR);
+            a.setHeaderText(null);
+            a.setTitle("Error");
+            a.setContentText("A required field is missing");
+            a.show();
+            return;
+        }
+        for(Assocation a : assocations.getItems()) {
+            if(a.getExtension().equals(extension)) {
+                Alert a2 = new Alert(AlertType.ERROR);
+                a2.setHeaderText(null);
+                a2.setTitle("Error");
+                a2.setContentText("A assocation with this extension already exsists!");
+                a2.show();
+                return;
+            }
+        }
+        File folder = new File(System.getProperty("java.io.tmpdir") + "/JPack");
+        folder.mkdirs();
+        File f = new File(folder.getAbsolutePath() + "/" + extension + ".properties");
+        if(!f.createNewFile()) {
+            Alert a2 = new Alert(AlertType.ERROR);
+            a2.setHeaderText(null);
+            a2.setTitle("Error");
+            a2.setContentText("A assocation with this extension already exsists!");
+            a2.show();
+            return;
+        }
+        Properties p = new Properties();
+        p.load(new FileInputStream(f));
+        p.setProperty("extension", extension);
+        p.setProperty("mime-type", mime);
+        p.setProperty("icon", iconPath);
+        p.setProperty("description", description);
+
+        try (FileWriter fileWriter = new FileWriter(f)) {
+          p.store(fileWriter, null);
+          fileWriter.flush();
+        }
+        assocations.getItems().add(new Assocation(extension, mime, iconPath, description, f));
+    }
+
+    public void onSaveFile(ActionEvent e) throws IOException {
+        Assocation a = assocations.getSelectionModel().getSelectedItem();
+        if(a == null) {
+            return;
+        }
+        String extension = this.extension.getText();
+        String description = this.description.getText();
+        String mime = this.mime.getText();
+        String iconPath = this.icon_as.getText();
+
+        if(extension.equals("") || description.equals("") || mime.equals("") || iconPath.equals("")) {
+            Alert a2 = new Alert(AlertType.ERROR);
+            a2.setHeaderText(null);
+            a2.setTitle("Error");
+            a2.setContentText("A required field is missing");
+            a2.show();
+            return;
+        }
+        for(Assocation a2 : assocations.getItems()) {
+            if(!a2.getExtension().equals(a.getExtension()) && a2.getExtension().equals(extension)) {
+                Alert a3 = new Alert(AlertType.ERROR);
+                a3.setHeaderText(null);
+                a3.setTitle("Error");
+                a3.setContentText("A assocation with this extension already exists!");
+                a3.show();
+                return;
+            }
+        }
+        a.setDescription(description);
+        a.setExtension(extension);
+        a.setMimiType(mime);
+        a.setIconPath(iconPath);
+
+        Properties p = new Properties();
+        p.load(new FileInputStream(a.getFile()));
+        p.setProperty("extension", extension);
+        p.setProperty("mime-type", mime);
+        p.setProperty("icon", iconPath);
+        p.setProperty("description", description);
+
+        try (FileWriter fileWriter = new FileWriter(a.getFile())) {
+            p.store(fileWriter, null);
+            fileWriter.flush();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+    }
+
+    public void onDelete(ActionEvent e) {
+        if(assocations.getSelectionModel().getSelectedItem() != null) {
+            Assocation a = assocations.getSelectionModel().getSelectedItem();
+            a.getFile().deleteOnExit();
+            assocations.getItems().remove(a);
+        }
+    }
+
+    private final class Type {
+
         private String name;
-        @Getter
+
         private String s;
 
         public Type(String name, String s) {
             this.name = name;
             this.s = s;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getS() {
+            return s;
         }
 
         @Override
@@ -400,7 +584,7 @@ public class MainController {
         }
     }
 
-    public class Settings {
+    public final class Settings {
 
         private String type;
         private String jarFilePath;
@@ -446,6 +630,64 @@ public class MainController {
             this.modules = modules;
         }
 
+    }
+
+    public final class Assocation {
+
+        private String extension;
+        private String mimiType;
+        private String iconPath;
+        private String description;
+        private File file;
+
+        public Assocation(String extension, String mimi_type, String iconPath, String description, File file) {
+            this.extension = extension;
+            this.mimiType = mimi_type;
+            this.iconPath = iconPath;
+            this.description = description;
+            this.file = file;
+        }
+
+        public String getExtension() {
+            return extension;
+        }
+
+        public String getMimiType() {
+            return mimiType;
+        }
+
+        public String getIconPath() {
+            return iconPath;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public File getFile() {
+            return file;
+        }
+
+        public void setExtension(String extension) {
+            this.extension = extension;
+        }
+
+        public void setMimiType(String mimiType) {
+            this.mimiType = mimiType;
+        }
+
+        public void setIconPath(String iconPath) {
+            this.iconPath = iconPath;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        @Override
+        public String toString() {
+            return getExtension();
+        }
     }
 
 }

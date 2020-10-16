@@ -8,6 +8,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -15,7 +16,7 @@ import java.io.IOException;
  */
 public class App extends Application {
 
-    private static Scene scene;
+    public static Scene scene;
     public static Stage s;
 
     @Override
@@ -38,6 +39,14 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+        StringBuilder arg = new StringBuilder();
+        for(String s : args) {
+            arg.append(s);
+        }
+        File f = new File(arg.toString());
+        if(f.exists()) {
+            MainController.ass = f;
+        }
         launch();
     }
 

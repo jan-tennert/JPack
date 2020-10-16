@@ -15,20 +15,20 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="372.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.Jan.JPack.MainController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="451.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.Jan.JPack.MainController">
   <tabs>
     <Tab text="Program">
          <content>
             <Pane prefHeight="168.0" prefWidth="372.0">
                <children>
-                  <ChoiceBox fx:id="type" layoutX="217.0" layoutY="34.0" prefHeight="25.0" prefWidth="149.0" />
+                  <ChoiceBox fx:id="type" layoutX="272.0" layoutY="34.0" prefHeight="25.0" prefWidth="164.0" />
                   <Text layoutX="6.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type:" wrappingWidth="71.025390625">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <Button fx:id="jar_chooser" layoutX="343.0" layoutY="63.0" mnemonicParsing="false" onAction="#onJarChooser" prefHeight="12.0" prefWidth="14.0" text="Button" />
-                  <TextField fx:id="jar_path" editable="false" layoutX="111.0" layoutY="63.0" prefHeight="25.0" prefWidth="232.0" />
+                  <Button fx:id="jar_chooser" layoutX="413.0" layoutY="63.0" mnemonicParsing="false" onAction="#onJarChooser" prefHeight="12.0" prefWidth="14.0" text="Button" />
+                  <TextField fx:id="jar_path" editable="false" layoutX="141.0" layoutY="63.0" prefHeight="25.0" prefWidth="272.0" />
                   <Text layoutX="7.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JAR File:">
                      <font>
                         <Font size="18.0" />
@@ -39,23 +39,23 @@
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="main_class" layoutX="110.0" layoutY="98.0" prefHeight="25.0" prefWidth="256.0" />
+                  <TextField fx:id="main_class" layoutX="142.0" layoutY="98.0" prefHeight="25.0" prefWidth="294.0" />
                   <Text layoutX="7.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JDK 14+ Dir: ">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="java_dir" editable="false" layoutX="110.0" layoutY="130.0" prefHeight="25.0" prefWidth="232.0" />
-                  <Button fx:id="java_chooser" layoutX="342.0" layoutY="130.0" mnemonicParsing="false" onAction="#onJDKDir" prefHeight="25.0" prefWidth="24.0" text="Button" />
+                  <TextField fx:id="java_dir" editable="false" layoutX="142.0" layoutY="130.0" prefHeight="25.0" prefWidth="270.0" />
+                  <Button fx:id="java_chooser" layoutX="412.0" layoutY="130.0" mnemonicParsing="false" onAction="#onJDKDir" prefHeight="25.0" prefWidth="24.0" text="Button" />
                   <Text layoutX="9.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Output:">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="output_dir" editable="false" layoutX="110.0" layoutY="161.0" prefHeight="25.0" prefWidth="232.0" />
-                  <Button fx:id="output_button" layoutX="342.0" layoutY="161.0" mnemonicParsing="false" onAction="#onOutputDir" prefHeight="25.0" prefWidth="24.0" text="Button" />
+                  <TextField fx:id="output_dir" editable="false" layoutX="142.0" layoutY="161.0" prefHeight="25.0" prefWidth="270.0" />
+                  <Button fx:id="output_button" layoutX="412.0" layoutY="161.0" mnemonicParsing="false" onAction="#onOutputDir" prefHeight="25.0" prefWidth="24.0" text="Button" />
                   <VBox layoutX="6.0" layoutY="4.0" prefHeight="17.0" prefWidth="364.0" />
-                  <MenuBar opacity="0.77" prefHeight="15.0" prefWidth="425.0">
+                  <MenuBar opacity="0.77" prefHeight="25.0" prefWidth="451.0">
                     <menus>
                       <Menu mnemonicParsing="false" text="File">
                         <items>
@@ -86,33 +86,33 @@
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="app_name" layoutX="123.0" layoutY="13.0" prefHeight="25.0" prefWidth="229.0" promptText="Enter the application name here" />
+                  <TextField fx:id="app_name" layoutX="158.0" layoutY="14.0" prefHeight="25.0" prefWidth="279.0" promptText="Enter the application name here" />
                   <Text layoutX="14.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="app_desc" layoutX="123.0" layoutY="44.0" prefHeight="25.0" prefWidth="229.0" promptText="Enter the description here" />
+                  <TextField fx:id="app_desc" layoutX="159.0" layoutY="45.0" prefHeight="25.0" prefWidth="278.0" promptText="Enter the description here" />
                   <Text layoutX="14.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Copyright:">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="app_copy" layoutX="123.0" layoutY="80.0" prefHeight="25.0" prefWidth="229.0" promptText="Enter the description here" />
+                  <TextField fx:id="app_copy" layoutX="157.0" layoutY="81.0" prefHeight="25.0" prefWidth="280.0" promptText="Enter the description here" />
                   <Text layoutX="14.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Version:">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="app_v" layoutX="123.0" layoutY="115.0" prefHeight="25.0" prefWidth="229.0" promptText="Enter the version here" />
+                  <TextField fx:id="app_v" layoutX="155.0" layoutY="116.0" prefHeight="25.0" prefWidth="282.0" promptText="Enter the version here" />
                   <Text layoutX="14.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Icon:">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <Button fx:id="icon_button" layoutX="328.0" layoutY="151.0" mnemonicParsing="false" onAction="#onIconChange" prefHeight="25.0" prefWidth="0.0" text="Change" />
-                  <TextField fx:id="icon_path" editable="false" layoutX="123.0" layoutY="151.0" prefHeight="25.0" prefWidth="206.0" />
-                  <TextField fx:id="vendor" layoutX="123.0" layoutY="182.0" prefHeight="25.0" prefWidth="228.0" promptText="Enter the publisher here" />
+                  <Button fx:id="icon_button" layoutX="413.0" layoutY="152.0" mnemonicParsing="false" onAction="#onIconChange" prefHeight="25.0" prefWidth="0.0" text="Change" />
+                  <TextField fx:id="icon_path" editable="false" layoutX="156.0" layoutY="152.0" prefHeight="25.0" prefWidth="258.0" />
+                  <TextField fx:id="vendor" layoutX="155.0" layoutY="183.0" prefHeight="25.0" prefWidth="281.0" promptText="Enter the publisher here" />
                   <Text layoutX="14.0" layoutY="201.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Publisher:">
                      <font>
                         <Font size="18.0" />
@@ -164,7 +164,7 @@
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <TextArea fx:id="java_options" layoutX="139.0" layoutY="11.0" prefHeight="56.0" prefWidth="222.0" />
+                  <TextArea fx:id="java_options" layoutX="139.0" layoutY="11.0" prefHeight="56.0" prefWidth="298.0" />
                   <Text layoutX="56.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" />
                   <Text layoutX="15.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Module-Path">
                      <font>
@@ -176,8 +176,25 @@
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <TextArea fx:id="module_path" layoutX="139.0" layoutY="73.0" prefHeight="56.0" prefWidth="222.0" />
-                  <TextArea fx:id="add_modules" layoutX="139.0" layoutY="139.0" prefHeight="56.0" prefWidth="222.0" />
+                  <TextArea fx:id="module_path" layoutX="139.0" layoutY="73.0" prefHeight="56.0" prefWidth="297.0" />
+                  <TextArea fx:id="add_modules" layoutX="139.0" layoutY="139.0" prefHeight="56.0" prefWidth="297.0" />
+               </children>
+            </Pane>
+         </content>
+      </Tab>
+      <Tab text="File Associations">
+         <content>
+            <Pane prefHeight="221.0" prefWidth="0.0">
+               <children>
+                  <TextField fx:id="extension" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="226.0" promptText="Extension" />
+                  <TextField fx:id="mime" layoutX="15.0" layoutY="64.0" prefHeight="25.0" prefWidth="224.0" promptText="Mime-Type" />
+                  <TextField fx:id="icon_as" editable="false" layoutX="15.0" layoutY="112.0" prefHeight="25.0" prefWidth="224.0" promptText="Icon" />
+                  <TextField fx:id="description" layoutX="14.0" layoutY="164.0" prefHeight="25.0" prefWidth="225.0" promptText="Description" />
+                  <ChoiceBox fx:id="assocations" layoutX="296.0" layoutY="14.0" prefHeight="25.0" prefWidth="141.0" />
+                  <Button layoutX="295.0" layoutY="164.0" mnemonicParsing="false" onAction="#add_button" prefHeight="25.0" prefWidth="134.0" text="Add" />
+                  <Button layoutX="296.0" layoutY="125.0" mnemonicParsing="false" onAction="#onSaveFile" prefHeight="25.0" prefWidth="133.0" text="Save" />
+                  <Button layoutX="239.0" layoutY="112.0" mnemonicParsing="false" onAction="#onFileIcon" prefHeight="25.0" prefWidth="26.0" text="Button" />
+                  <Button layoutX="296.0" layoutY="85.0" mnemonicParsing="false" onAction="#onDelete" prefHeight="25.0" prefWidth="133.0" text="Delete" />
                </children>
             </Pane>
          </content>
