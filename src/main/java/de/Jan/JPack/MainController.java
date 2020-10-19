@@ -4,22 +4,27 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NonNull;
 
+import java.awt.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 public class MainController {
     @FXML
@@ -111,34 +116,7 @@ public class MainController {
         if(ass != null) {
             File file = ass;
             if(file.exists()) {
-                JsonReader j = new JsonReader(new FileReader(file));
-                Settings s = gson.fromJson(j, Settings.class);
-                type.getSelectionModel().select((s.type.equals("exe")) ? standard : msi);
-                jar_File = !s.jarFilePath.equals("") ? new File(s.jarFilePath) : null;
-                jar_path.setText(s.jarFilePath);
-                jar_Input = jar_File.getParentFile();
-                main_class.setText(s.mainClass);
-                java_dir.setText(s.JDKDir);
-                output_dir.setText(s.outputPath);
-                output = !s.outputPath.equals("") ? new File(s.outputPath) : null;
-                app_name.setText(s.name);
-                app_desc.setText(s.description);
-                app_copy.setText(s.copyright);
-                app_v.setText(s.version);
-                icon_path.setText(s.iconPath);
-                app_icon = !s.iconPath.equals("") ? new File(s.iconPath) : null;
-                vendor.setText(s.publisher);
-                create_shortcut.setSelected(s.desktopShortcut);
-                dir_chooser.setSelected(s.userInstallFolder);
-                system_menu.setSelected(s.createSystemMenuItem);
-                system_group.setText(s.systemMenuName);
-                user_mode.setSelected(s.installWithUserRights);
-                console_mode.setSelected(s.consoleApplication);
-                java_options.setText(s.javaOption);
-                module_path.setText(s.modulePath);
-                add_modules.setText(s.modules);
-                jpackage = new File(java_dir.getText() + "/bin/jpackage.exe");
-                currentSettingsFile = file;
+               openSettingsFile(file);
             }
         }
 
@@ -352,34 +330,7 @@ public class MainController {
         f.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSettings File", "*.jsettings"));
         File file = f.showOpenDialog(App.s);
         if(file != null && file.exists()) {
-            JsonReader j = new JsonReader(new FileReader(file));
-            Settings s = gson.fromJson(j, Settings.class);
-            type.getSelectionModel().select((s.type.equals("exe")) ? standard : msi);
-            jar_File = !s.jarFilePath.equals("") ? new File(s.jarFilePath) : null;
-            jar_path.setText(s.jarFilePath);
-            jar_Input = jar_File.getParentFile();
-            main_class.setText(s.mainClass);
-            java_dir.setText(s.JDKDir);
-            output_dir.setText(s.outputPath);
-            output = !s.outputPath.equals("") ? new File(s.outputPath) : null;
-            app_name.setText(s.name);
-            app_desc.setText(s.description);
-            app_copy.setText(s.copyright);
-            app_v.setText(s.version);
-            icon_path.setText(s.iconPath);
-            app_icon = !s.iconPath.equals("") ? new File(s.iconPath) : null;
-            vendor.setText(s.publisher);
-            create_shortcut.setSelected(s.desktopShortcut);
-            dir_chooser.setSelected(s.userInstallFolder);
-            system_menu.setSelected(s.createSystemMenuItem);
-            system_group.setText(s.systemMenuName);
-            user_mode.setSelected(s.installWithUserRights);
-            console_mode.setSelected(s.consoleApplication);
-            java_options.setText(s.javaOption);
-            module_path.setText(s.modulePath);
-            add_modules.setText(s.modules);
-            jpackage = new File(java_dir.getText() + "/bin/jpackage.exe");
-            currentSettingsFile = file;
+           openSettingsFile(file);
         }
     }
 
@@ -416,6 +367,37 @@ public class MainController {
 
     public void onClose(ActionEvent e) {
         System.exit(0);
+    }
+
+    private void openSettingsFile(File file) throws FileNotFoundException {
+        JsonReader j = new JsonReader(new FileReader(file));
+        Settings s = gson.fromJson(j, Settings.class);
+        type.getSelectionModel().select((s.type.equals("exe")) ? standard : msi);
+        jar_File = !s.jarFilePath.equals("") ? new File(s.jarFilePath) : null;
+        jar_path.setText(s.jarFilePath);
+        jar_Input = jar_File.getParentFile();
+        main_class.setText(s.mainClass);
+        java_dir.setText(s.JDKDir);
+        output_dir.setText(s.outputPath);
+        output = !s.outputPath.equals("") ? new File(s.outputPath) : null;
+        app_name.setText(s.name);
+        app_desc.setText(s.description);
+        app_copy.setText(s.copyright);
+        app_v.setText(s.version);
+        icon_path.setText(s.iconPath);
+        app_icon = !s.iconPath.equals("") ? new File(s.iconPath) : null;
+        vendor.setText(s.publisher);
+        create_shortcut.setSelected(s.desktopShortcut);
+        dir_chooser.setSelected(s.userInstallFolder);
+        system_menu.setSelected(s.createSystemMenuItem);
+        system_group.setText(s.systemMenuName);
+        user_mode.setSelected(s.installWithUserRights);
+        console_mode.setSelected(s.consoleApplication);
+        java_options.setText(s.javaOption);
+        module_path.setText(s.modulePath);
+        add_modules.setText(s.modules);
+        jpackage = new File(java_dir.getText() + "/bin/jpackage.exe");
+        currentSettingsFile = file;
     }
 
     public void onNew(ActionEvent e) {
@@ -557,6 +539,94 @@ public class MainController {
             a.getFile().deleteOnExit();
             assocations.getItems().remove(a);
         }
+    }
+
+    public void exportZip(ActionEvent e) throws IOException {
+        FileChooser chooser = new FileChooser();
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ZIP Archive", "*.zip"));
+        chooser.setTitle("Choose the save location");
+        File file = chooser.showSaveDialog(App.s);
+        if(file != null) {
+            ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(file));
+            for (int i = 0; i < assocations.getItems().size(); i++) {
+                FileInputStream input = new FileInputStream(assocations.getItems().get(i).getFile());
+                zip.putNextEntry(new ZipEntry(assocations.getItems().get(i).getExtension() + ".jsettings"));
+
+                byte[] b = new byte[1024];
+                int count;
+
+                while ((count = input.read(b)) > 0) {
+                    zip.write(b, 0, count);
+                }
+                input.close();
+            }
+            zip.setComment("File Associations for JPack");
+            zip.close();
+            Alert a = new Alert(AlertType.CONFIRMATION);
+            a.setHeaderText(null);
+            a.setTitle("Information");
+            a.setContentText("The zip archive was created!");
+
+            ButtonType openFile = new ButtonType("Open File");
+            ButtonType openFolder = new ButtonType("Open Folder");
+            ButtonType cancel = new ButtonType("Cancel");
+            a.getButtonTypes().setAll(openFile, openFolder, cancel);
+
+            Optional<ButtonType> result = a.showAndWait();
+            if(result.get().equals(openFile)) {
+                Desktop.getDesktop().open(file);
+            } else if(result.get().equals(openFolder)) {
+                Desktop.getDesktop().open(file.getParentFile());
+            }
+        }
+    }
+
+    public void importZip(ActionEvent e) throws IOException {
+        FileChooser chooser = new FileChooser();
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ZIP Archive", "*.zip"));
+        chooser.setTitle("Select the zip archive");
+        File f = chooser.showOpenDialog(App.s);
+        if(f != null) {
+            File folder = new File(System.getProperty("java.io.tmpdir") + "/JPack");
+            List<File> files = unzipFiles(f.getAbsolutePath(), folder);
+            for(File file : files) {
+
+            }
+        }
+    }
+
+    public List<File> unzipFiles(String zip, File destination) throws IOException {
+        List<File> files = new ArrayList<>();
+        byte[] buffer = new byte[1024];
+        ZipInputStream zis = new ZipInputStream(new FileInputStream(zip));
+        ZipEntry zipEntry = zis.getNextEntry();
+        while (zipEntry != null) {
+            File newFile = newFile(destination, zipEntry);
+            files.add(newFile);
+            FileOutputStream fos = new FileOutputStream(newFile);
+            int len;
+            while ((len = zis.read(buffer)) > 0) {
+                fos.write(buffer, 0, len);
+            }
+            fos.close();
+            zipEntry = zis.getNextEntry();
+        }
+        zis.closeEntry();
+        zis.close();
+        return files;
+    }
+
+    public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
+        File destFile = new File(destinationDir, zipEntry.getName());
+
+        String destDirPath = destinationDir.getCanonicalPath();
+        String destFilePath = destFile.getCanonicalPath();
+
+        if (!destFilePath.startsWith(destDirPath + File.separator)) {
+            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
+        }
+
+        return destFile;
     }
 
     private final class Type {
