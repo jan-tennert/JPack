@@ -106,12 +106,21 @@ public class MainController {
     private Gson gson = new Gson();
     private Type standard =  new Type("EXE (Windows)", "exe");
     private Type msi = new Type("MSI (Windows)", "msi");
-    private File currentSettingsFile = null;
+    public static File currentSettingsFile = null;
     private File ass_icon;
     public static File ass;
 
 
     public void initialize() throws FileNotFoundException {
+
+        File folder = new File(System.getProperty("java.io.tmpdir") + "/JPack");
+        if(folder != null && folder.listFiles() != null && folder.listFiles().length != 0) {
+            for(File f : folder.listFiles()) {
+                if(!f.isDirectory() && f.getName().contains(".properties")) {
+                    f.delete();
+                }
+            }
+        }
 
         if(ass != null) {
             File file = ass;
@@ -541,6 +550,15 @@ public class MainController {
         }
     }
 
+    public Assocation getAssociationFromFile(File f) throws IOException {
+        Properties properties = new Properties();
+        FileInputStream in = new FileInputStream(f);
+        properties.load(in);
+        Assocation a = new Assocation(properties.getProperty("extension"), properties.getProperty("mime-type"), properties.getProperty("icon"), properties.getProperty("description"), f);
+        in.close();
+        return a;
+    }
+
     public void exportZip(ActionEvent e) throws IOException {
         FileChooser chooser = new FileChooser();
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ZIP Archive", "*.zip"));
@@ -590,7 +608,7 @@ public class MainController {
             File folder = new File(System.getProperty("java.io.tmpdir") + "/JPack");
             List<File> files = unzipFiles(f.getAbsolutePath(), folder);
             for(File file : files) {
-
+                assocations.getItems().add(getAssociationFromFile(file));
             }
         }
     }
