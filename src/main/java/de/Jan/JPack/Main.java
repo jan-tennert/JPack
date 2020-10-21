@@ -1,6 +1,6 @@
 package de.Jan.JPack;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
 
 public class Main {
 
