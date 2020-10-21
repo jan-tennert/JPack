@@ -18,6 +18,7 @@ import javafx.stage.FileChooser;
 
 import java.awt.*;
 import java.io.*;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -112,7 +113,6 @@ public class MainController {
 
 
     public void initialize() throws FileNotFoundException {
-
         File folder = new File(System.getProperty("java.io.tmpdir") + "/JPack");
         if(folder != null && folder.listFiles() != null && folder.listFiles().length != 0) {
             for(File f : folder.listFiles()) {
@@ -169,9 +169,9 @@ public class MainController {
 
     public void onJDKDir(ActionEvent e) {
         String javaHome = System.getenv("JAVA_HOME");
-        File javahomeDir = new File(javaHome);
+        File javahomeDir = (javaHome != null) ? new File(javaHome): null;
         DirectoryChooser d = new DirectoryChooser();
-        if(javahomeDir.exists()) {
+        if(javahomeDir != null && javahomeDir.exists()) {
             d.setInitialDirectory(javahomeDir);
         }
         d.setTitle("Select the jdk folder");
