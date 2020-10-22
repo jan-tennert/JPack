@@ -103,9 +103,9 @@ public class MainController {
     private File jpackage;
     private File jar_Input;
     private File app_icon;
-    private Gson gson = new Gson();
-    private Type standard =  new Type("EXE (Windows)", "exe");
-    private Type msi = new Type("MSI (Windows)", "msi");
+    private final Gson gson = new Gson();
+    private final Type standard =  new Type("EXE (Windows)", "exe");
+    private final Type msi = new Type("MSI (Windows)", "msi");
     public static File currentSettingsFile = null;
     private File ass_icon;
     public static File ass;
@@ -222,7 +222,7 @@ public class MainController {
         }
     }
 
-    public void onCompile(ActionEvent e) {
+    public void onCompile(ActionEvent e) throws IOException {
         if(jpackage == null || jar_File == null || main_class.getText().equals("") || type == null || output == null) {
             Alert a = new Alert(AlertType.ERROR);
             a.setHeaderText(null);
@@ -280,12 +280,18 @@ public class MainController {
             for(Assocation a : assocations.getItems()) {
                 command.append(" --file-associations \"").append(a.getFile().getAbsolutePath()).append("\"");
             }
-            try {
+          //  try {
                 System.out.println(command);
-                Process p = Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"" + command + " && exit\"");
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+              //  Process p = Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"" + command + " && exit\"");
+            Alert a = new Alert(AlertType.INFORMATION);
+            DialogPane pane = (DialogPane) App.loadFXML("Process");
+            a.dialogPaneProperty().setValue(pane);
+            a.setTitle("Compiling...");
+            a.show();
+              //  p.waitFor();
+          //  } catch (IOException | InterruptedException ioException) {
+          ////      ioException.printStackTrace();
+          //  }
         }
 
 
@@ -648,9 +654,9 @@ public class MainController {
 
     private final class Type {
 
-        private String name;
+        private final String name;
 
-        private String s;
+        private final String s;
 
         public Type(String name, String s) {
             this.name = name;
@@ -673,26 +679,26 @@ public class MainController {
 
     public final class Settings {
 
-        private String type;
-        private String jarFilePath;
-        private String mainClass;
-        private String JDKDir;
-        private String outputPath;
-        private String name;
-        private String description;
-        private String copyright;
-        private String version;
-        private String iconPath;
-        private String publisher;
-        private boolean desktopShortcut;
-        private boolean userInstallFolder;
-        private boolean createSystemMenuItem;
-        private String systemMenuName;
-        private boolean installWithUserRights;
-        private boolean consoleApplication;
-        private String javaOption;
-        private String modulePath;
-        private String modules;
+        private final String type;
+        private final String jarFilePath;
+        private final String mainClass;
+        private final String JDKDir;
+        private final String outputPath;
+        private final String name;
+        private final String description;
+        private final String copyright;
+        private final String version;
+        private final String iconPath;
+        private final String publisher;
+        private final boolean desktopShortcut;
+        private final boolean userInstallFolder;
+        private final boolean createSystemMenuItem;
+        private final String systemMenuName;
+        private final boolean installWithUserRights;
+        private final boolean consoleApplication;
+        private final String javaOption;
+        private final String modulePath;
+        private final String modules;
 
         public Settings(String type, String jarFilePath, String mainClass, String JDKDir, String outputPath, String name, String description, String copyright, String version, String iconPath, String publisher, boolean desktopShortcut, boolean userInstallFolder, boolean createSystemMenuItem, String systemMenuName, boolean installWithUserRights, boolean consoleApplication, String javaOption, String modulePath, String modules) {
             this.type = type;
@@ -725,7 +731,7 @@ public class MainController {
         private String mimiType;
         private String iconPath;
         private String description;
-        private File file;
+        private final File file;
 
         public Assocation(String extension, String mimi_type, String iconPath, String description, File file) {
             this.extension = extension;

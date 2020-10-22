@@ -3,3 +3,5 @@
 /dependency-reduced-pom.xml
 /.idea/
 
+out/
+src/main/java/META-INF/
