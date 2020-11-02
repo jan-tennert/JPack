@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="451.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.Jan.JPack.MainController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="451.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.Jan.JPack.MainController">
   <tabs>
     <Tab text="Program">
          <content>
@@ -191,12 +191,12 @@
                   <TextField fx:id="icon_as" editable="false" layoutX="15.0" layoutY="112.0" prefHeight="25.0" prefWidth="224.0" promptText="Icon" />
                   <TextField fx:id="description" layoutX="14.0" layoutY="164.0" prefHeight="25.0" prefWidth="225.0" promptText="Description" />
                   <ChoiceBox fx:id="assocations" layoutX="296.0" layoutY="14.0" prefHeight="25.0" prefWidth="141.0" />
-                  <Button layoutX="296.0" layoutY="120.0" mnemonicParsing="false" onAction="#add_button" prefHeight="25.0" prefWidth="134.0" text="Add" />
-                  <Button layoutX="297.0" layoutY="82.0" mnemonicParsing="false" onAction="#onSaveFile" prefHeight="25.0" prefWidth="133.0" text="Save" />
+                  <Button layoutX="296.0" layoutY="110.0" mnemonicParsing="false" onAction="#add_button" prefHeight="25.0" prefWidth="134.0" text="Add" />
+                  <Button layoutX="297.0" layoutY="79.0" mnemonicParsing="false" onAction="#onSaveFile" prefHeight="25.0" prefWidth="133.0" text="Save" />
                   <Button layoutX="239.0" layoutY="112.0" mnemonicParsing="false" onAction="#onFileIcon" prefHeight="25.0" prefWidth="26.0" text="Button" />
-                  <Button layoutX="297.0" layoutY="46.0" mnemonicParsing="false" onAction="#onDelete" prefHeight="25.0" prefWidth="133.0" text="Delete" />
-                  <Button layoutX="296.0" layoutY="158.0" mnemonicParsing="false" onAction="#exportZip" prefHeight="25.0" prefWidth="134.0" text="Export to zip..." />
-                  <Button layoutX="296.0" layoutY="192.0" mnemonicParsing="false" onAction="#importZip" prefHeight="25.0" prefWidth="134.0" text="Import from zip..." />
+                  <Button layoutX="297.0" layoutY="47.0" mnemonicParsing="false" onAction="#onDelete" prefHeight="25.0" prefWidth="133.0" text="Delete" />
+                  <Button layoutX="296.0" layoutY="145.0" mnemonicParsing="false" onAction="#importZip" prefHeight="25.0" prefWidth="134.0" text="Import from zip..." />
+                  <Button layoutX="296.0" layoutY="180.0" mnemonicParsing="false" onAction="#exportZip" prefHeight="25.0" prefWidth="134.0" text="Export to zip..." />
                </children>
             </Pane>
          </content>

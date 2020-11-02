@@ -2,8 +2,10 @@ package de.Jan.JPack;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -13,11 +15,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.awt.*;
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -103,9 +108,9 @@ public class MainController {
     private File jpackage;
     private File jar_Input;
     private File app_icon;
-    private final Gson gson = new Gson();
-    private final Type standard =  new Type("EXE (Windows)", "exe");
-    private final Type msi = new Type("MSI (Windows)", "msi");
+    private Gson gson = new Gson();
+    private Type standard =  new Type("EXE (Windows)", "exe");
+    private Type msi = new Type("MSI (Windows)", "msi");
     public static File currentSettingsFile = null;
     private File ass_icon;
     public static File ass;
@@ -222,7 +227,7 @@ public class MainController {
         }
     }
 
-    public void onCompile(ActionEvent e) throws IOException {
+    public void onCompile(ActionEvent e) throws IOException, InterruptedException {
         if(jpackage == null || jar_File == null || main_class.getText().equals("") || type == null || output == null) {
             Alert a = new Alert(AlertType.ERROR);
             a.setHeaderText(null);
@@ -280,18 +285,88 @@ public class MainController {
             for(Assocation a : assocations.getItems()) {
                 command.append(" --file-associations \"").append(a.getFile().getAbsolutePath()).append("\"");
             }
-          //  try {
-                System.out.println(command);
-              //  Process p = Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"" + command + " && exit\"");
-            Alert a = new Alert(AlertType.INFORMATION);
-            DialogPane pane = (DialogPane) App.loadFXML("Process");
-            a.dialogPaneProperty().setValue(pane);
-            a.setTitle("Compiling...");
-            a.show();
-              //  p.waitFor();
-          //  } catch (IOException | InterruptedException ioException) {
-          ////      ioException.printStackTrace();
-          //  }
+            System.out.println(command);
+            Process p = Runtime.getRuntime().exec("cmd /c cmd.exe /K " + command + " && echo LOL");
+            DialogPane d = (DialogPane) App.loadFXML("Process");
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Comiling...");
+            alert.initOwner(App.s);
+            alert.setDialogPane(d);
+            alert.setOnCloseRequest(c -> {
+                if(p.isAlive()) {
+                    Alert a = new Alert(AlertType.CONFIRMATION);
+                    a.setHeaderText(null);
+                    a.setTitle("Confirmation");
+                    a.setContentText("Do you really want to stop the compiler?");
+                    ButtonType yes = new ButtonType("Yes");
+                    ButtonType no = new ButtonType("No");
+                    a.getButtonTypes().setAll(yes, no);
+                    Optional<ButtonType> re = a.showAndWait();
+                    if(re.isPresent() && re.get().equals(yes)) {
+                        p.destroy();
+                    }
+                } else {
+                    Alert a = new Alert(AlertType.INFORMATION);
+                    a.setHeaderText(null);
+                    a.setTitle("Information");
+                    a.setContentText("Compiling done!");
+                    ButtonType openFile = new ButtonType("Open File");
+                    ButtonType openFolder = new ButtonType("Open Folder");
+                    ButtonType close = new ButtonType("Close");
+                    a.getButtonTypes().setAll(openFile, openFolder, close);
+                    Optional<ButtonType> res = a.showAndWait();
+                    if(res.isPresent()) {
+                        if(res.get().equals(openFile)) {
+                            try {
+                                Desktop.getDesktop().open(output);
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
+                        } else if(res.get().equals(openFolder)) {
+                            try {
+                                Desktop.getDesktop().open(output.getParentFile());
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            });
+           alert.show();
+           Platform.runLater(() -> {
+               new Thread(() -> {
+                   try {
+                       p.waitFor();
+                       String line;
+                       BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                       while((line=input.readLine()) != null){
+                           for(Node nodeIn: d.getChildren()){
+                               if(nodeIn instanceof Pane){
+                                   for(Node n : ((Pane) nodeIn).getChildren()) {
+                                       if(n instanceof TextArea) {
+                                           DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                                           LocalDateTime now = LocalDateTime.now();
+                                           String date = dtf.format(now);
+                                           ((TextArea) n).appendText("[" + date + "] " + line + "\n");
+                                       }
+                                   }
+                               }
+                           }
+
+                       }
+
+                       input.close();
+
+                       OutputStream outputStream = p.getOutputStream();
+                       PrintStream printStream = new PrintStream(outputStream);
+                       printStream.println();
+                       printStream.flush();
+                       printStream.close();
+                   } catch(IOException | InterruptedException er) {
+                       er.printStackTrace();
+                   }
+               }).start();
+            });
         }
 
 
@@ -654,9 +729,9 @@ public class MainController {
 
     private final class Type {
 
-        private final String name;
+        private String name;
 
-        private final String s;
+        private String s;
 
         public Type(String name, String s) {
             this.name = name;
@@ -679,26 +754,26 @@ public class MainController {
 
     public final class Settings {
 
-        private final String type;
-        private final String jarFilePath;
-        private final String mainClass;
-        private final String JDKDir;
-        private final String outputPath;
-        private final String name;
-        private final String description;
-        private final String copyright;
-        private final String version;
-        private final String iconPath;
-        private final String publisher;
-        private final boolean desktopShortcut;
-        private final boolean userInstallFolder;
-        private final boolean createSystemMenuItem;
-        private final String systemMenuName;
-        private final boolean installWithUserRights;
-        private final boolean consoleApplication;
-        private final String javaOption;
-        private final String modulePath;
-        private final String modules;
+        private String type;
+        private String jarFilePath;
+        private String mainClass;
+        private String JDKDir;
+        private String outputPath;
+        private String name;
+        private String description;
+        private String copyright;
+        private String version;
+        private String iconPath;
+        private String publisher;
+        private boolean desktopShortcut;
+        private boolean userInstallFolder;
+        private boolean createSystemMenuItem;
+        private String systemMenuName;
+        private boolean installWithUserRights;
+        private boolean consoleApplication;
+        private String javaOption;
+        private String modulePath;
+        private String modules;
 
         public Settings(String type, String jarFilePath, String mainClass, String JDKDir, String outputPath, String name, String description, String copyright, String version, String iconPath, String publisher, boolean desktopShortcut, boolean userInstallFolder, boolean createSystemMenuItem, String systemMenuName, boolean installWithUserRights, boolean consoleApplication, String javaOption, String modulePath, String modules) {
             this.type = type;
@@ -731,7 +806,7 @@ public class MainController {
         private String mimiType;
         private String iconPath;
         private String description;
-        private final File file;
+        private File file;
 
         public Assocation(String extension, String mimi_type, String iconPath, String description, File file) {
             this.extension = extension;
