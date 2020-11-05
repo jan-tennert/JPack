@@ -286,7 +286,9 @@ public class MainController {
                 command.append(" --file-associations \"").append(a.getFile().getAbsolutePath()).append("\"");
             }
             System.out.println("[COMMAND] " + command);
-            Process p = Runtime.getRuntime().exec(command.toString());
+            Process p = Runtime.getRuntime().exec("cmd.exe /c start cmd.exe /K \"" + command + "\"");
+            BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
+            wr.write("Test");
 
            Platform.runLater(() -> {
                new Thread(() -> {
@@ -314,14 +316,6 @@ public class MainController {
                    }
                }).start();
             });
-            try {
-                if(p.waitFor() == 0) {
-                    System.out.println("test");
-                }
-            } catch (InterruptedException interruptedException) {
-                interruptedException.printStackTrace();
-            }
-            System.out.println("a");
         }
 
 
