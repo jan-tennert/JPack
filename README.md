@@ -1,7 +1,7 @@
 # JPack
 Simply create an installer for your Java Application
 
-# Requirements
+# Requirements (only for compiling)
 
 - [WiX Toolset](https://wixtoolset.org/)
 - [.NET Framework 3.5+](https://www.microsoft.com/de-de/download/details.aspx?id=21)
