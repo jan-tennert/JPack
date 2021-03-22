@@ -30,11 +30,10 @@ public class App extends Application {
         mbar.getMenus().add(file);
         s = stage;
         s.setTitle("JPack");
-        s.setResizable(false);
         stage.show();
     }
 
-    public static Parent loadFXML(String fxml) throws IOException {
+    private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
